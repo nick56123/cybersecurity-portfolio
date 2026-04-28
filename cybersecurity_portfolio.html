@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nicholas Taormino — Cybersecurity Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #00d4ff;
+    --accent: #00ff88;
+    --accent2: #7b2ff7;
+    --bg-dark: #050a14;
+    --bg-card: #0b1726;
+    --bg-card2: #0f1f35;
+    --text: #e8f4ff;
+    --text-muted: #8ab0cc;
+    --border: rgba(0,212,255,0.2);
+    --gradient: linear-gradient(135deg, #00d4ff, #7b2ff7);
+  }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family:'Exo 2', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size:40px 40px;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* Glow orbs */
+  .orb { position:fixed; border-radius:50%; pointer-events:none; z-index:0; filter:blur(80px); opacity:0.12; }
+  .orb1 { width:500px; height:500px; background:#00d4ff; top:-100px; left:-100px; }
+  .orb2 { width:400px; height:400px; background:#7b2ff7; bottom:-80px; right:-80px; }
+
+  /* ── NAV ── */
+  nav {
+    position:fixed; top:0; left:0; right:0;
+    z-index:200;
+    background:rgba(5,10,20,0.95);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    padding:0 1.5rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:60px;
+  }
+  .nav-brand {
+    font-family:'Orbitron', monospace;
+    font-size:0.95rem;
+    font-weight:700;
+    background: var(--gradient);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    letter-spacing:2px;
+    white-space:nowrap;
+  }
+  .nav-links { display:flex; gap:0.2rem; list-style:none; flex-wrap:nowrap; }
+  .nav-links a {
+    display:block;
+    padding:0.4rem 0.6rem;
+    color:var(--text-muted);
+    text-decoration:none;
+    font-size:0.75rem;
+    font-weight:500;
+    border-radius:4px;
+    transition:all 0.2s;
+    border:1px solid transparent;
+    white-space:nowrap;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color:var(--primary);
+    border-color:var(--border);
+    background:rgba(0,212,255,0.05);
+  }
+
+  /* Hamburger button (mobile only) */
+  .nav-toggle {
+    display:none;
+    flex-direction:column;
+    gap:5px;
+    cursor:pointer;
+    padding:6px;
+    background:none;
+    border:none;
+  }
+  .nav-toggle span {
+    display:block;
+    width:22px;
+    height:2px;
+    background:var(--primary);
+    border-radius:2px;
+    transition:all 0.3s;
+  }
+
+  /* Mobile nav drawer */
+  .mobile-nav {
+    display:none;
+    position:fixed;
+    top:60px; left:0; right:0;
+    background:rgba(5,10,20,0.98);
+    border-bottom:1px solid var(--border);
+    z-index:199;
+    flex-direction:column;
+    padding:1rem;
+    gap:0.5rem;
+  }
+  .mobile-nav.open { display:flex; }
+  .mobile-nav a {
+    color:var(--text-muted);
+    text-decoration:none;
+    font-size:0.9rem;
+    padding:0.65rem 1rem;
+    border-radius:6px;
+    border:1px solid transparent;
+    transition:all 0.2s;
+  }
+  .mobile-nav a:hover, .mobile-nav a.active {
+    color:var(--primary);
+    border-color:var(--border);
+    background:rgba(0,212,255,0.05);
+  }
+
+  /* ── PAGES ── */
+  .page { display:none; min-height:100vh; padding-top:60px; position:relative; z-index:1; }
+  .page.active { display:block; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height:calc(100vh - 60px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:3rem 1.5rem;
+    text-align:center;
+  }
+  .hero-inner { max-width:860px; width:100%; }
+
+  .hero-badge {
+    display:inline-block;
+    padding:0.35rem 1rem;
+    border:1px solid var(--primary);
+    border-radius:100px;
+    font-size:0.72rem;
+    letter-spacing:2px;
+    color:var(--primary);
+    margin-bottom:1.75rem;
+    font-family:'Orbitron', monospace;
+    font-weight:600;
+  }
+
+  .hero-photo-wrap {
+    margin:0 auto 2rem;
+    width:200px;
+    height:200px;
+    border-radius:50%;
+    padding:3px;
+    background:var(--gradient);
+  }
+  .hero-photo-inner {
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    overflow:hidden;
+    background:#0b1726;
+  }
+  .hero-photo-inner img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center 15%;
+    display:block;
+  }
+
+  .hero h1 {
+    font-family:'Orbitron', monospace;
+    font-size:clamp(1.8rem, 5vw, 3.8rem);
+    font-weight:900;
+    line-height:1.1;
+    margin-bottom:1rem;
+    background:linear-gradient(135deg, #fff 30%, var(--primary) 70%, var(--accent2) 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
+
+  .hero-name {
+    font-family:'Orbitron', monospace;
+    font-size:1.25rem;
+    font-weight:700;
+    color:#fff;
+    margin-bottom:0.25rem;
+    letter-spacing:1px;
+  }
+  .hero-class {
+    font-size:0.8rem;
+    color:var(--primary);
+    letter-spacing:1.5px;
+    margin-bottom:2rem;
+    font-weight:500;
+  }
+
+  .hero-desc {
+    font-size:1rem;
+    color:var(--text-muted);
+    line-height:1.85;
+    max-width:620px;
+    margin:0 auto 2.5rem;
+  }
+  .hero-desc strong { color:var(--primary); font-weight:600; }
+
+  .hero-stats {
+    display:flex;
+    gap:1rem;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .stat-box {
+    text-align:center;
+    padding:0.85rem 1.25rem;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--bg-card);
+    min-width:100px;
+    flex:1 1 100px;
+    max-width:160px;
+  }
+  .stat-box .num {
+    font-family:'Orbitron', monospace;
+    font-size:1.6rem;
+    font-weight:700;
+    color:var(--primary);
+  }
+  .stat-box .label {
+    font-size:0.68rem;
+    color:var(--text-muted);
+    letter-spacing:1px;
+    margin-top:0.2rem;
+    text-transform:uppercase;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-hero {
+    padding:3.5rem 1.5rem 2rem;
+    text-align:center;
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .page-hero h2 {
+    font-family:'Orbitron', monospace;
+    font-size:clamp(1.6rem, 4vw, 2.6rem);
+    font-weight:700;
+    background:var(--gradient);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    margin-bottom:0.75rem;
+  }
+  .page-hero p { color:var(--text-muted); font-size:0.95rem; max-width:600px; margin:0 auto; line-height:1.7; }
+  .divider { width:80px; height:3px; background:var(--gradient); margin:1.25rem auto; border-radius:2px; }
+
+  .container { max-width:1100px; margin:0 auto; padding:1.5rem; }
+
+  /* ── CARDS ── */
+  .card {
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:1.5rem;
+    transition:border-color 0.2s, transform 0.2s;
+  }
+  .card:hover { border-color:rgba(0,212,255,0.45); transform:translateY(-3px); }
+  .card h3 {
+    font-family:'Orbitron', monospace;
+    font-size:0.95rem;
+    font-weight:600;
+    color:var(--primary);
+    margin-bottom:0.75rem;
+    letter-spacing:1px;
+  }
+  .card p { color:var(--text-muted); line-height:1.75; font-size:0.92rem; }
+
+  .grid-2 { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.25rem; }
+  .grid-3 { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1.25rem; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family:'Orbitron', monospace;
+    font-size:1.1rem;
+    font-weight:600;
+    color:var(--accent);
+    margin-bottom:1.25rem;
+    padding-bottom:0.5rem;
+    border-bottom:1px solid rgba(0,255,136,0.2);
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+  }
+  .section-title::before {
+    content:'';
+    width:8px; height:8px;
+    background:var(--accent);
+    border-radius:50%;
+    display:inline-block;
+    flex-shrink:0;
+  }
+
+  /* ── COURSE LIST ── */
+  .course-list { list-style:none; }
+  .course-list li {
+    padding:0.6rem 1rem;
+    border-left:2px solid var(--primary);
+    margin-bottom:0.45rem;
+    background:rgba(0,212,255,0.04);
+    border-radius:0 8px 8px 0;
+    font-size:0.87rem;
+    color:var(--text);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:0.25rem;
+  }
+  .course-list li .cr {
+    font-size:0.72rem;
+    color:var(--primary);
+    font-family:'Orbitron', monospace;
+    font-weight:600;
+    white-space:nowrap;
+  }
+
+  /* ── SCHOOL CARDS ── */
+  .school-card {
+    background:var(--bg-card2);
+    border:1px solid var(--border);
+    border-radius:16px;
+    overflow:hidden;
+    transition:border-color 0.2s, transform 0.2s;
+  }
+  .school-card:hover { border-color:rgba(0,212,255,0.45); transform:translateY(-3px); }
+  .school-header {
+    padding:1.1rem 1.5rem;
+    background:rgba(0,212,255,0.08);
+    border-bottom:1px solid var(--border);
+  }
+  .school-header h3 {
+    font-family:'Orbitron', monospace;
+    font-size:0.88rem;
+    color:var(--primary);
+    font-weight:700;
+  }
+  .school-header .degree { color:var(--accent); font-size:0.82rem; margin-top:0.25rem; font-weight:500; }
+  .school-body { padding:1.25rem 1.5rem; }
+  .school-body p { color:var(--text-muted); line-height:1.75; font-size:0.88rem; margin-bottom:0.75rem; }
+
+  /* ── CAREER CARDS ── */
+  .career-card {
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:1.5rem;
+    transition:border-color 0.2s, transform 0.2s;
+    position:relative;
+    overflow:hidden;
+  }
+  .career-card::before {
+    content:'';
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:3px;
+    background:var(--gradient);
+  }
+  .career-card:hover { border-color:rgba(0,212,255,0.45); transform:translateY(-3px); }
+  .career-title {
+    font-family:'Orbitron', monospace;
+    font-size:0.9rem;
+    color:#fff;
+    font-weight:700;
+    margin-bottom:0.2rem;
+  }
+  .career-company { color:var(--primary); font-size:0.83rem; margin-bottom:1rem; font-weight:500; }
+  .career-card p { color:var(--text-muted); line-height:1.75; font-size:0.88rem; margin-bottom:0.75rem; }
+  .salary-badge {
+    display:inline-block;
+    padding:0.3rem 0.8rem;
+    background:rgba(0,255,136,0.1);
+    border:1px solid rgba(0,255,136,0.3);
+    border-radius:100px;
+    font-size:0.75rem;
+    color:var(--accent);
+    font-family:'Orbitron', monospace;
+    font-weight:600;
+  }
+
+  /* ── EMERGING TECH ── */
+  .tech-hero {
+    background:linear-gradient(135deg, rgba(0,212,255,0.08), rgba(123,47,247,0.08));
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:2rem;
+    margin-bottom:2rem;
+    text-align:center;
+  }
+  .tech-hero h3 {
+    font-family:'Orbitron', monospace;
+    font-size:clamp(1rem, 3vw, 1.5rem);
+    color:#fff;
+    margin-bottom:0.5rem;
+  }
+  .tech-hero p { color:var(--text-muted); font-size:0.92rem; line-height:1.8; }
+
+  .info-row { display:flex; gap:0.75rem; margin-bottom:0.75rem; align-items:flex-start; }
+  .info-label {
+    font-family:'Orbitron', monospace;
+    font-size:0.68rem;
+    color:var(--primary);
+    letter-spacing:1px;
+    min-width:110px;
+    padding-top:0.15rem;
+    font-weight:600;
+    flex-shrink:0;
+  }
+  .info-text { color:var(--text-muted); font-size:0.88rem; line-height:1.7; }
+
+  /* ── IMAGE CARDS ── */
+  .img-card {
+    background:var(--bg-card2);
+    border:1px solid var(--border);
+    border-radius:16px;
+    overflow:hidden;
+    margin-bottom:2rem;
+  }
+  .img-card-inner {
+    width:100%;
+    height:200px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg, #070e1b, #0f1d38);
+    overflow:hidden;
+  }
+  .img-card-inner svg { width:100%; height:100%; }
+  .img-caption {
+    padding:0.65rem 1.25rem;
+    font-size:0.78rem;
+    color:var(--text-muted);
+    text-align:center;
+    border-top:1px solid var(--border);
+    font-style:italic;
+  }
+
+  /* ── WORKS CITED ── */
+  .cite-list { list-style:none; }
+  .cite-list li {
+    padding:0.9rem 1.1rem;
+    border-left:3px solid var(--accent2);
+    margin-bottom:0.65rem;
+    background:var(--bg-card);
+    border-radius:0 10px 10px 0;
+    font-size:0.85rem;
+    color:var(--text-muted);
+    line-height:1.7;
+  }
+  .cite-list li a { color:var(--primary); word-break:break-all; }
+  .cite-num {
+    font-family:'Orbitron', monospace;
+    color:var(--accent2);
+    font-weight:700;
+    margin-right:0.4rem;
+    font-size:0.78rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background:var(--bg-card);
+    border-top:1px solid var(--border);
+    padding:1.5rem;
+    text-align:center;
+    color:var(--text-muted);
+    font-size:0.82rem;
+    margin-top:3rem;
+    position:relative;
+    z-index:1;
+    line-height:1.8;
+  }
+  footer strong { color:var(--primary); }
+
+  /* ── MOBILE RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .nav-links { display:none; }
+    .nav-toggle { display:flex; }
+
+    .hero { padding:2rem 1rem; }
+    .hero-photo-wrap { width:170px; height:170px; }
+    .hero-stats { gap:0.65rem; }
+    .stat-box { min-width:80px; padding:0.7rem 0.8rem; }
+    .stat-box .num { font-size:1.3rem; }
+
+    .page-hero { padding:2.5rem 1rem 1.5rem; }
+    .container { padding:1rem; }
+
+    .grid-2, .grid-3 { grid-template-columns:1fr; }
+    .info-row { flex-direction:column; gap:0.2rem; }
+    .info-label { min-width:unset; }
+
+    .img-card-inner { height:150px; }
+    .course-list li { font-size:0.82rem; }
+
+    .tech-hero { padding:1.5rem 1rem; }
+    .school-body, .school-header { padding:1rem; }
+    .career-card, .card { padding:1.1rem; }
+  }
+
+  @media (max-width: 400px) {
+    .hero-badge { font-size:0.6rem; letter-spacing:1px; }
+    .nav-brand { font-size:0.8rem; }
+    .stat-box { min-width:70px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-brand">CYBER.JOURNEY</div>
+  <ul class="nav-links" id="desktopNav">
+    <li><a href="#" class="active" onclick="return showPage('home',this)">Home</a></li>
+    <li><a href="#" onclick="return showPage('academics-hcc',this)">HCC Academics</a></li>
+    <li><a href="#" onclick="return showPage('academics-beyond',this)">Beyond HCC</a></li>
+    <li><a href="#" onclick="return showPage('career',this)">Future Career</a></li>
+    <li><a href="#" onclick="return showPage('tech',this)">Emerging Tech</a></li>
+    <li><a href="#" onclick="return showPage('citations',this)">Works Cited</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE NAV DRAWER -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#" class="active" onclick="return mobileNav('home',this)">Home</a>
+  <a href="#" onclick="return mobileNav('academics-hcc',this)">HCC Academics</a>
+  <a href="#" onclick="return mobileNav('academics-beyond',this)">Beyond HCC</a>
+  <a href="#" onclick="return mobileNav('career',this)">Future Career</a>
+  <a href="#" onclick="return mobileNav('tech',this)">Emerging Tech</a>
+  <a href="#" onclick="return mobileNav('citations',this)">Works Cited</a>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE 1: HOME                                  -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-inner">
+
+      <div class="hero-badge">CYBERSECURITY PATHWAY &mdash; CLASS OF 2026</div>
+
+      <div class="hero-photo-wrap">
+        <div class="hero-photo-inner">
+          <img src="nicholas_pro.png" alt="Nicholas Taormino" />
+        </div>
+      </div>
+
+      <h1>Defending the<br>Digital Frontier</h1>
+
+      <p class="hero-name">Nicholas Taormino</p>
+      <p class="hero-class">CGS-1000: Introduction to Computers &amp; Technology &nbsp;&bull;&nbsp; Hillsborough Community College</p>
+
+      <p class="hero-desc">
+        Welcome to my academic portfolio. My name is <strong>Nicholas Taormino</strong>, and I am currently
+        pursuing an <strong>Associate of Arts degree</strong> at Hillsborough Community College
+        with a pathway in <strong>Cybersecurity</strong>. After completing my degree, I plan to transfer to
+        the <strong>University of South Florida</strong> to earn my Bachelor of Science in Cybersecurity.
+        This website was created for <strong>CGS-1000: Introduction to Computers &amp; Technology</strong>
+        and documents my academic journey, career goals, and passion for protecting the digital world.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat-box">
+          <div class="num">AA</div>
+          <div class="label">Degree Path</div>
+        </div>
+        <div class="stat-box">
+          <div class="num">HCC</div>
+          <div class="label">Current School</div>
+        </div>
+        <div class="stat-box">
+          <div class="num">USF</div>
+          <div class="label">Transfer Goal</div>
+        </div>
+        <div class="stat-box">
+          <div class="num">29%</div>
+          <div class="label">Field Growth</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <footer>
+    <strong>Nicholas Taormino</strong> &mdash; CGS-1000: Introduction to Computers &amp; Technology<br>
+    Hillsborough Community College &mdash; &copy; 2026
+  </footer>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE 2: HCC ACADEMICS                         -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="page" id="page-academics-hcc">
+  <div class="page-hero">
+    <h2>Academics at HCC</h2>
+    <div class="divider"></div>
+    <p>My foundation in cybersecurity begins at Hillsborough Community College, where I am currently pursuing an Associate of Arts degree with a Cybersecurity pathway.</p>
+  </div>
+
+  <div class="container">
+
+    <div class="img-card">
+      <div class="img-card-inner">
+        <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="200" fill="#070e1b"/>
+          <rect x="80" y="75" width="120" height="110" fill="#0b1a2e" rx="3"/>
+          <rect x="100" y="55" width="80" height="28" fill="#0d2040" rx="2"/>
+          <rect x="85" y="85" width="25" height="28" fill="#1a3a60" rx="1"/>
+          <rect x="120" y="85" width="25" height="28" fill="#1a3a60" rx="1"/>
+          <rect x="155" y="85" width="25" height="28" fill="#1a3a60" rx="1"/>
+          <rect x="85" y="125" width="25" height="28" fill="#1a3a60" rx="1"/>
+          <rect x="120" y="125" width="25" height="28" fill="#1a3a60" rx="1"/>
+          <rect x="155" y="125" width="25" height="28" fill="#1a3a60" rx="1"/>
+          <rect x="250" y="45" width="300" height="140" fill="#0c1d35" rx="4"/>
+          <rect x="280" y="28" width="55" height="26" fill="#0f2545" rx="2"/>
+          <rect x="370" y="22" width="55" height="35" fill="#0f2545" rx="2"/>
+          <rect x="460" y="28" width="55" height="26" fill="#0f2545" rx="2"/>
+          <rect x="268" y="62" width="28" height="20" fill="#00d4ff" rx="1" opacity="0.4"/>
+          <rect x="310" y="62" width="28" height="20" fill="#00d4ff" rx="1" opacity="0.2"/>
+          <rect x="352" y="62" width="28" height="20" fill="#00d4ff" rx="1" opacity="0.5"/>
+          <rect x="394" y="62" width="28" height="20" fill="#00d4ff" rx="1" opacity="0.3"/>
+          <rect x="436" y="62" width="28" height="20" fill="#00d4ff" rx="1" opacity="0.4"/>
+          <rect x="478" y="62" width="28" height="20" fill="#00d4ff" rx="1" opacity="0.2"/>
+          <rect x="268" y="96" width="28" height="20" fill="#00d4ff" rx="1" opacity="0.2"/>
+          <rect x="310" y="96" width="28" height="20" fill="#00d4ff" rx="1" opacity="0.5"/>
+          <rect x="352" y="96" width="28" height="20" fill="#7b2ff7" rx="1" opacity="0.4"/>
+          <rect x="394" y="96" width="28" height="20" fill="#00d4ff" rx="1" opacity="0.3"/>
+          <rect x="436" y="96" width="28" height="20" fill="#00d4ff" rx="1" opacity="0.4"/>
+          <rect x="478" y="96" width="28" height="20" fill="#7b2ff7" rx="1" opacity="0.2"/>
+          <rect x="600" y="78" width="120" height="108" fill="#0b1a2e" rx="3"/>
+          <rect x="614" y="88" width="24" height="20" fill="#1a3a60" rx="1"/>
+          <rect x="650" y="88" width="24" height="20" fill="#1a3a60" rx="1"/>
+          <rect x="686" y="88" width="24" height="20" fill="#1a3a60" rx="1"/>
+          <rect x="614" y="120" width="24" height="20" fill="#1a3a60" rx="1"/>
+          <rect x="650" y="120" width="24" height="20" fill="#1a3a60" rx="1"/>
+          <rect x="686" y="120" width="24" height="20" fill="#1a3a60" rx="1"/>
+          <rect x="0" y="180" width="800" height="20" fill="#0a1420"/>
+          <text x="400" y="162" font-family="'Orbitron', monospace" font-size="12" font-weight="700" fill="#00d4ff" text-anchor="middle" letter-spacing="3">HILLSBOROUGH COMMUNITY COLLEGE</text>
+          <line x1="0" y1="180" x2="800" y2="180" stroke="#00d4ff" stroke-width="1" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="img-caption">Hillsborough Community College &mdash; Tampa, Florida</div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:2rem;">
+      <div class="card">
+        <h3>My Major</h3>
+        <p>I am pursuing a <strong style="color:var(--primary);">Computer Information Technology (CIT)</strong> major with a
+        Cybersecurity specialization. This program is designed to build a strong foundation in networking,
+        information security, and computing principles — setting me on a direct path toward a career
+        protecting digital systems and data.</p>
+      </div>
+      <div class="card">
+        <h3>Degree I Will Obtain</h3>
+        <p>Upon completion, I will earn an <strong style="color:var(--primary);">Associate of Arts (AA) Degree</strong>
+        with a Cybersecurity Pathway from HCC. This 60-credit degree qualifies me for direct transfer into a
+        four-year Bachelor of Science program in Cybersecurity at the University of South Florida and other
+        state institutions. HCC is an <strong style="color:var(--accent);">NSA-designated</strong> Center of
+        Academic Excellence in Cyber Defense Education.</p>
+      </div>
+    </div>
+
+    <h3 class="section-title">Core Courses in the Program</h3>
+    <div class="grid-2">
+      <ul class="course-list">
+        <li>CGS 1000 &mdash; Introduction to Computers &amp; Technology <span class="cr">3 CR</span></li>
+        <li>ENC 1101 &mdash; English Composition I <span class="cr">3 CR</span></li>
+        <li>MAC 1147 &mdash; Precalculus Algebra &amp; Trigonometry <span class="cr">5 CR</span></li>
+        <li>SLS 1106 &mdash; First Year Experience Orientation <span class="cr">3 CR</span></li>
+        <li>CGS 1540 &mdash; Database Management I <span class="cr">3 CR</span></li>
+        <li>COP 1000 &mdash; Programming Logic <span class="cr">3 CR</span></li>
+        <li>CGS 2820 &mdash; Web Authoring HTML <span class="cr">3 CR</span></li>
+      </ul>
+      <ul class="course-list">
+        <li>CTS 1305 &mdash; Introduction to Networking <span class="cr">3 CR</span></li>
+        <li>IDS 2891 &mdash; Interdisciplinary Seminar (Required) <span class="cr">3 CR</span></li>
+        <li>ENC 1102 &mdash; English Composition II <span class="cr">3 CR</span></li>
+        <li>CTS 2440 &mdash; Network Security <span class="cr">3 CR</span></li>
+        <li>AMH 2010 &mdash; American History <span class="cr">3 CR</span></li>
+        <li>COP 2355 &mdash; Programming in Python <span class="cr">3 CR</span></li>
+        <li>General Education Electives <span class="cr">6 CR</span></li>
+      </ul>
+    </div>
+
+  </div>
+  <footer>
+    <strong>Nicholas Taormino</strong> &mdash; CGS-1000: Introduction to Computers &amp; Technology<br>
+    Hillsborough Community College &mdash; &copy; 2026
+  </footer>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE 3: ACADEMICS BEYOND HCC                  -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="page" id="page-academics-beyond">
+  <div class="page-hero">
+    <h2>Academics Beyond HCC</h2>
+    <div class="divider"></div>
+    <p>After earning my AA degree, I plan to transfer and complete my bachelor's degree at one of the nation's leading cybersecurity programs.</p>
+  </div>
+
+  <div class="container">
+
+    <div class="img-card">
+      <div class="img-card-inner">
+        <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="200" fill="#070e1b"/>
+          <circle cx="140" cy="100" r="48" fill="none" stroke="#00d4ff" stroke-width="1.5" opacity="0.6"/>
+          <text x="140" y="96" font-family="'Orbitron', monospace" font-size="13" font-weight="700" fill="#00d4ff" text-anchor="middle">HCC</text>
+          <text x="140" y="112" font-family="'Orbitron', monospace" font-size="8" fill="#8ab0cc" text-anchor="middle">AA DEGREE</text>
+          <line x1="196" y1="100" x2="320" y2="100" stroke="#7b2ff7" stroke-width="2" stroke-dasharray="6,4"/>
+          <polygon points="320,95 335,100 320,105" fill="#7b2ff7"/>
+          <text x="262" y="88" font-family="'Exo 2', sans-serif" font-size="10" fill="#7b2ff7" text-anchor="middle">TRANSFER</text>
+          <circle cx="410" cy="100" r="62" fill="none" stroke="#00ff88" stroke-width="1.5" opacity="0.6"/>
+          <text x="410" y="96" font-family="'Orbitron', monospace" font-size="14" font-weight="700" fill="#00ff88" text-anchor="middle">USF</text>
+          <text x="410" y="112" font-family="'Orbitron', monospace" font-size="8" fill="#8ab0cc" text-anchor="middle">BS CYBERSECURITY</text>
+          <circle cx="580" cy="65" r="26" fill="none" stroke="#8ab0cc" stroke-width="1" opacity="0.4"/>
+          <text x="580" y="60" font-family="'Orbitron', monospace" font-size="10" fill="#8ab0cc" text-anchor="middle">UCF</text>
+          <text x="580" y="73" font-family="'Exo 2', sans-serif" font-size="8" fill="#8ab0cc" text-anchor="middle">BS CyberSec</text>
+          <circle cx="680" cy="100" r="26" fill="none" stroke="#8ab0cc" stroke-width="1" opacity="0.4"/>
+          <text x="680" y="95" font-family="'Orbitron', monospace" font-size="10" fill="#8ab0cc" text-anchor="middle">WGU</text>
+          <text x="680" y="108" font-family="'Exo 2', sans-serif" font-size="8" fill="#8ab0cc" text-anchor="middle">BS CyberSec</text>
+          <circle cx="580" cy="148" r="26" fill="none" stroke="#8ab0cc" stroke-width="1" opacity="0.4"/>
+          <text x="580" y="143" font-family="'Orbitron', monospace" font-size="10" fill="#8ab0cc" text-anchor="middle">UF</text>
+          <text x="580" y="156" font-family="'Exo 2', sans-serif" font-size="8" fill="#8ab0cc" text-anchor="middle">BS CompSci</text>
+          <line x1="468" y1="72" x2="554" y2="65" stroke="#8ab0cc" stroke-width="0.75" stroke-dasharray="4,3" opacity="0.4"/>
+          <line x1="470" y1="100" x2="654" y2="100" stroke="#8ab0cc" stroke-width="0.75" stroke-dasharray="4,3" opacity="0.4"/>
+          <line x1="468" y1="128" x2="554" y2="148" stroke="#8ab0cc" stroke-width="0.75" stroke-dasharray="4,3" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="img-caption">Transfer pathways from HCC — continuing toward a four-year cybersecurity degree</div>
+    </div>
+
+    <div class="grid-3">
+
+      <div class="school-card">
+        <div class="school-header">
+          <h3>University of South Florida</h3>
+          <div class="degree">B.S. in Cybersecurity (BSCyS)</div>
+        </div>
+        <div class="school-body">
+          <p>The USF Cybersecurity program is accredited by ABET's Computing Accreditation Commission and is housed within the new Bellini College of Artificial Intelligence, Cybersecurity and Computing. Students build a strong technical foundation in programming, databases, networks, and statistics while also exploring the ethical, policy, and risk management dimensions of the field.</p>
+          <p>The program includes a mandatory capstone project, internship opportunities with Tampa Bay's growing tech sector, and access to cooperative education programs. Companies such as Lockheed Martin, ReliaQuest, and Rapid7 actively recruit from USF's talent pool. An accelerated BS-to-MS pathway also allows motivated students to earn a master's degree simultaneously.</p>
+          <p><strong style="color:var(--accent);">Why I chose USF:</strong> As my primary transfer destination, USF offers ABET-accredited instruction, a thriving Tampa Bay tech community, and direct articulation agreements with HCC — making my transition seamless.</p>
+        </div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-header">
+          <h3>University of Central Florida</h3>
+          <div class="degree">B.S. in Cybersecurity</div>
+        </div>
+        <div class="school-body">
+          <p>UCF's Department of Computer Science offers a dedicated Bachelor of Science in Cybersecurity through its College of Engineering and Computer Science. The curriculum emphasizes hands-on skills in network defense, ethical hacking, cryptography, and digital forensics. UCF's Florida Center for Cybersecurity — known as Cyber Florida — serves as the state's central hub for cybersecurity research and education.</p>
+          <p>UCF boasts one of the largest cybersecurity research programs in the southeastern United States, giving students access to cutting-edge labs and research opportunities. The program also prepares students for industry certifications including CompTIA Security+, the Certified Ethical Hacker (CEH), and CISSP.</p>
+          <p><strong style="color:var(--accent);">Notable feature:</strong> UCF hosts major cybersecurity competitions such as the Florida Collegiate Cyber Defense Competition, offering students valuable real-world challenge experience.</p>
+        </div>
+      </div>
+
+      <div class="school-card">
+        <div class="school-header">
+          <h3>Western Governors University</h3>
+          <div class="degree">B.S. in Cybersecurity &amp; Information Assurance</div>
+        </div>
+        <div class="school-body">
+          <p>WGU's cybersecurity program is unique in its competency-based model, meaning students advance by demonstrating mastery rather than completing timed semesters. The curriculum is fully aligned with NICE (National Initiative for Cybersecurity Education) frameworks and includes six industry certifications bundled at no additional cost — including CompTIA A+, Network+, Security+, CySA+, PenTest+, and CASP+.</p>
+          <p>WGU is fully online, ABET-accredited, and recognized by the NSA and DHS as a National Center of Academic Excellence in Cyber Defense Education. This makes it an excellent option for students who need a flexible schedule alongside employment or other commitments.</p>
+          <p><strong style="color:var(--accent);">Notable feature:</strong> Graduates leave with six industry-recognized certifications embedded in their degree — a significant advantage when entering the job market.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <footer>
+    <strong>Nicholas Taormino</strong> &mdash; CGS-1000: Introduction to Computers &amp; Technology<br>
+    Hillsborough Community College &mdash; &copy; 2026
+  </footer>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE 4: FUTURE CAREER                         -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="page" id="page-career">
+  <div class="page-hero">
+    <h2>Future Career</h2>
+    <div class="divider"></div>
+    <p>The cybersecurity field is projected to grow 29% through 2034 — nearly three times the national average. Below are three roles I am targeting in my career.</p>
+  </div>
+
+  <div class="container">
+
+    <div class="img-card">
+      <div class="img-card-inner">
+        <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="200" fill="#040c18"/>
+          <rect x="80" y="145" width="640" height="10" fill="#0b1726" rx="2"/>
+          <rect x="108" y="75" width="115" height="70" fill="#0a1830" rx="4"/>
+          <rect x="113" y="80" width="105" height="56" fill="#051420" rx="2"/>
+          <circle cx="142" cy="108" r="8" fill="none" stroke="#00d4ff" stroke-width="1" opacity="0.8"/>
+          <circle cx="165" cy="95" r="6" fill="none" stroke="#00d4ff" stroke-width="1" opacity="0.6"/>
+          <circle cx="190" cy="112" r="7" fill="none" stroke="#7b2ff7" stroke-width="1" opacity="0.8"/>
+          <circle cx="170" cy="122" r="5" fill="none" stroke="#00ff88" stroke-width="1" opacity="0.7"/>
+          <line x1="142" y1="108" x2="165" y2="95" stroke="#00d4ff" stroke-width="0.75" opacity="0.5"/>
+          <line x1="165" y1="95" x2="190" y2="112" stroke="#00d4ff" stroke-width="0.75" opacity="0.5"/>
+          <line x1="142" y1="108" x2="170" y2="122" stroke="#00ff88" stroke-width="0.75" opacity="0.5"/>
+          <rect x="148" y="145" width="28" height="7" fill="#0d1e35" rx="1"/>
+          <rect x="275" y="50" width="250" height="95" fill="#0a1830" rx="4"/>
+          <rect x="281" y="56" width="238" height="80" fill="#041020" rx="2"/>
+          <polyline points="286,95 300,82 310,100 320,85 334,104 348,77 362,95 376,72 386,90 400,67 410,87 424,107 434,82 448,97 458,85 476,92 486,99" fill="none" stroke="#00d4ff" stroke-width="1.5" opacity="0.85"/>
+          <text x="400" y="125" font-family="'Orbitron', monospace" font-size="8" fill="#00ff88" text-anchor="middle">THREAT MONITORING — LIVE</text>
+          <rect x="365" y="145" width="68" height="7" fill="#0d1e35" rx="1"/>
+          <circle cx="290" cy="63" r="3" fill="#00ff88"/>
+          <circle cx="300" cy="63" r="3" fill="#00ff88"/>
+          <circle cx="310" cy="63" r="3" fill="#ef4444"/>
+          <rect x="568" y="75" width="115" height="70" fill="#0a1830" rx="4"/>
+          <rect x="573" y="80" width="105" height="56" fill="#051420" rx="2"/>
+          <rect x="580" y="110" width="10" height="22" fill="#00d4ff" opacity="0.6"/>
+          <rect x="594" y="102" width="10" height="30" fill="#7b2ff7" opacity="0.7"/>
+          <rect x="608" y="114" width="10" height="18" fill="#00d4ff" opacity="0.5"/>
+          <rect x="622" y="95" width="10" height="37" fill="#ef4444" opacity="0.7"/>
+          <rect x="636" y="107" width="10" height="25" fill="#00ff88" opacity="0.6"/>
+          <rect x="650" y="105" width="10" height="27" fill="#00d4ff" opacity="0.4"/>
+          <rect x="664" y="112" width="10" height="20" fill="#7b2ff7" opacity="0.5"/>
+          <rect x="608" y="145" width="28" height="7" fill="#0d1e35" rx="1"/>
+          <text x="400" y="185" font-family="'Orbitron', monospace" font-size="11" font-weight="700" fill="#00d4ff" text-anchor="middle" letter-spacing="3">SECURITY OPERATIONS CENTER</text>
+        </svg>
+      </div>
+      <div class="img-caption">Security Operations Centers (SOCs) are the command hubs where cybersecurity professionals monitor, detect, and respond to threats in real time.</div>
+    </div>
+
+    <div class="grid-3">
+
+      <div class="career-card">
+        <div class="career-title">Information Security Analyst</div>
+        <div class="career-company">ReliaQuest &mdash; Tampa, FL</div>
+        <p>As an Information Security Analyst, I would be responsible for monitoring an organization's networks and systems for security breaches and investigating violations when they occur. Day-to-day responsibilities include installing security software, documenting security incidents, and conducting simulated attacks to identify vulnerabilities before malicious actors can exploit them.</p>
+        <p>ReliaQuest is headquartered in Tampa, making it a prime local employer. Their GreyMatter platform uses AI-driven detection, and analysts work across a global security ecosystem protecting hundreds of enterprise clients.</p>
+        <div style="margin-top:1rem;">
+          <span class="salary-badge">Median: $124,910 / yr (BLS)</span>
+        </div>
+      </div>
+
+      <div class="career-card">
+        <div class="career-title">Penetration Tester</div>
+        <div class="career-company">Rapid7 &mdash; Tampa, FL</div>
+        <p>A Penetration Tester — also known as an Ethical Hacker — is hired to legally simulate cyberattacks against an organization's systems, applications, and networks in order to find vulnerabilities before real attackers do. Using tools such as Metasploit, Burp Suite, and Nmap, penetration testers document their findings and recommend remediation strategies.</p>
+        <p>Rapid7 is a leading cybersecurity firm with a significant presence in Tampa. Working here would provide exposure to diverse client environments across finance, healthcare, and government sectors — helping me build broad offensive security expertise quickly.</p>
+        <div style="margin-top:1rem;">
+          <span class="salary-badge">Average: $143,000+ / yr</span>
+        </div>
+      </div>
+
+      <div class="career-card">
+        <div class="career-title">Cybersecurity Engineer</div>
+        <div class="career-company">Lockheed Martin &mdash; Orlando / Tampa, FL</div>
+        <p>A Cybersecurity Engineer designs, implements, and maintains the security systems that protect an organization's networks and data. Responsibilities include building and managing firewalls, intrusion detection systems, and SIEM platforms. Engineers also develop security policies and procedures and respond to incidents when they arise.</p>
+        <p>Lockheed Martin is a major defense contractor that actively recruits from Florida universities. Working on government and defense contracts would provide exposure to classified systems and national security infrastructure — one of the most challenging and rewarding areas in the entire field.</p>
+        <div style="margin-top:1rem;">
+          <span class="salary-badge">Average: $130,000–$148,000 / yr</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <footer>
+    <strong>Nicholas Taormino</strong> &mdash; CGS-1000: Introduction to Computers &amp; Technology<br>
+    Hillsborough Community College &mdash; &copy; 2026
+  </footer>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE 5: EMERGING TECHNOLOGY                   -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="page" id="page-tech">
+  <div class="page-hero">
+    <h2>Emerging Technology</h2>
+    <div class="divider"></div>
+    <p>One of the most transformative technologies reshaping cybersecurity today is Artificial Intelligence — and it is the technology I am most excited to work with in my future career.</p>
+  </div>
+
+  <div class="container">
+
+    <div class="tech-hero">
+      <div style="font-size:3rem; margin-bottom:0.75rem; line-height:1;">🤖</div>
+      <h3>Artificial Intelligence in Cybersecurity</h3>
+      <p>AI-powered security systems represent the next frontier in cyber defense — enabling organizations to detect, analyze, and respond to threats faster and more accurately than any human team could achieve alone.</p>
+    </div>
+
+    <div class="img-card" style="margin-bottom:2rem;">
+      <div class="img-card-inner">
+        <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="200" fill="#040c18"/>
+          <circle cx="75" cy="55" r="13" fill="none" stroke="#00d4ff" stroke-width="1.5"/>
+          <circle cx="75" cy="100" r="13" fill="none" stroke="#00d4ff" stroke-width="1.5"/>
+          <circle cx="75" cy="145" r="13" fill="none" stroke="#00d4ff" stroke-width="1.5"/>
+          <circle cx="210" cy="40" r="13" fill="none" stroke="#7b2ff7" stroke-width="1.5"/>
+          <circle cx="210" cy="82" r="13" fill="none" stroke="#7b2ff7" stroke-width="1.5"/>
+          <circle cx="210" cy="124" r="13" fill="none" stroke="#7b2ff7" stroke-width="1.5"/>
+          <circle cx="210" cy="166" r="13" fill="none" stroke="#7b2ff7" stroke-width="1.5"/>
+          <circle cx="355" cy="50" r="13" fill="none" stroke="#7b2ff7" stroke-width="1.5"/>
+          <circle cx="355" cy="100" r="13" fill="none" stroke="#7b2ff7" stroke-width="1.5"/>
+          <circle cx="355" cy="150" r="13" fill="none" stroke="#7b2ff7" stroke-width="1.5"/>
+          <circle cx="500" cy="40" r="13" fill="none" stroke="#00ff88" stroke-width="1.5"/>
+          <circle cx="500" cy="82" r="13" fill="none" stroke="#00ff88" stroke-width="1.5"/>
+          <circle cx="500" cy="124" r="13" fill="none" stroke="#00ff88" stroke-width="1.5"/>
+          <circle cx="500" cy="166" r="13" fill="none" stroke="#00ff88" stroke-width="1.5"/>
+          <circle cx="650" cy="70" r="13" fill="none" stroke="#00d4ff" stroke-width="1.5"/>
+          <circle cx="650" cy="130" r="13" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+          <text x="650" y="74" font-family="'Exo 2', sans-serif" font-size="8" fill="#00d4ff" text-anchor="middle">SAFE</text>
+          <text x="650" y="134" font-family="'Exo 2', sans-serif" font-size="8" fill="#ef4444" text-anchor="middle">THREAT</text>
+          <line x1="88" y1="55" x2="197" y2="40" stroke="#00d4ff" stroke-width="0.5" opacity="0.3"/>
+          <line x1="88" y1="55" x2="197" y2="82" stroke="#00d4ff" stroke-width="0.5" opacity="0.3"/>
+          <line x1="88" y1="100" x2="197" y2="82" stroke="#00d4ff" stroke-width="0.5" opacity="0.5"/>
+          <line x1="88" y1="100" x2="197" y2="124" stroke="#00d4ff" stroke-width="0.5" opacity="0.3"/>
+          <line x1="88" y1="145" x2="197" y2="124" stroke="#00d4ff" stroke-width="0.5" opacity="0.3"/>
+          <line x1="88" y1="145" x2="197" y2="166" stroke="#00d4ff" stroke-width="0.5" opacity="0.5"/>
+          <line x1="223" y1="40" x2="342" y2="50" stroke="#7b2ff7" stroke-width="0.5" opacity="0.4"/>
+          <line x1="223" y1="82" x2="342" y2="100" stroke="#7b2ff7" stroke-width="0.5" opacity="0.6"/>
+          <line x1="223" y1="124" x2="342" y2="100" stroke="#7b2ff7" stroke-width="0.5" opacity="0.4"/>
+          <line x1="223" y1="166" x2="342" y2="150" stroke="#7b2ff7" stroke-width="0.5" opacity="0.4"/>
+          <line x1="368" y1="50" x2="487" y2="40" stroke="#7b2ff7" stroke-width="0.5" opacity="0.4"/>
+          <line x1="368" y1="100" x2="487" y2="82" stroke="#7b2ff7" stroke-width="0.5" opacity="0.6"/>
+          <line x1="368" y1="100" x2="487" y2="124" stroke="#7b2ff7" stroke-width="0.5" opacity="0.4"/>
+          <line x1="368" y1="150" x2="487" y2="166" stroke="#7b2ff7" stroke-width="0.5" opacity="0.3"/>
+          <line x1="513" y1="40" x2="637" y2="70" stroke="#00ff88" stroke-width="0.5" opacity="0.5"/>
+          <line x1="513" y1="82" x2="637" y2="70" stroke="#00ff88" stroke-width="0.5" opacity="0.4"/>
+          <line x1="513" y1="124" x2="637" y2="130" stroke="#00ff88" stroke-width="0.5" opacity="0.6"/>
+          <line x1="513" y1="166" x2="637" y2="130" stroke="#00ff88" stroke-width="0.5" opacity="0.5"/>
+          <text x="75" y="182" font-family="'Exo 2', sans-serif" font-size="8" fill="#8ab0cc" text-anchor="middle">Input</text>
+          <text x="285" y="14" font-family="'Orbitron', monospace" font-size="9" fill="#7b2ff7" text-anchor="middle" letter-spacing="2">DEEP LEARNING MODEL</text>
+          <text x="650" y="182" font-family="'Exo 2', sans-serif" font-size="8" fill="#8ab0cc" text-anchor="middle">Output</text>
+        </svg>
+      </div>
+      <div class="img-caption">A neural network model trained to classify network traffic — distinguishing safe connections from potential cyberattacks</div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:2rem;">
+      <div class="card">
+        <h3>How It Is Used</h3>
+        <div class="info-row">
+          <span class="info-label">THREAT DETECTION</span>
+          <span class="info-text">AI systems analyze network traffic, system logs, and user behavior in real time to identify suspicious patterns — even novel threats that have never been seen before — by learning from millions of historical security events.</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">AUTO RESPONSE</span>
+          <span class="info-text">When a threat is detected, AI can automatically isolate affected systems, block malicious traffic, and trigger incident response playbooks — reducing response time from hours down to seconds.</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">PHISHING DETECTION</span>
+          <span class="info-text">Machine learning models scan emails for linguistic patterns, sender behavior, and contextual clues to flag phishing attempts before they reach end users — dramatically reducing the success rate of social engineering attacks.</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">BEHAVIORAL AI</span>
+          <span class="info-text">AI profiles normal user behavior and flags anomalies — such as logins from unusual locations or abnormal data transfers — that may signal compromised accounts or insider threats.</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>How I Will Use It &amp; Why It Interests Me</h3>
+        <div class="info-row">
+          <span class="info-label">MY ROLE</span>
+          <span class="info-text">As a future cybersecurity professional, I plan to work with AI-powered security platforms such as CrowdStrike Falcon and SentinelOne to monitor enterprise networks. Understanding how machine learning models are trained and deployed will be essential to my work.</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">EDUCATION FIT</span>
+          <span class="info-text">USF's new Bellini College of Artificial Intelligence, Cybersecurity and Computing directly combines both fields. My coursework will include AI and machine learning fundamentals alongside cybersecurity — giving me a rare dual expertise that the job market increasingly demands.</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">CAREER FIT</span>
+          <span class="info-text">The generative AI cybersecurity market is expected to grow nearly tenfold between 2024 and 2034. Professionals who understand both AI and security will be among the most sought-after in the industry — and that is exactly the intersection I am working toward.</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">WHY I CARE</span>
+          <span class="info-text">The same AI that defends us is being weaponized by attackers to craft smarter phishing campaigns, adaptive malware, and deepfakes. I find the ongoing battle between AI-powered attackers and AI-powered defenders to be one of the most intellectually stimulating challenges in technology today.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <footer>
+    <strong>Nicholas Taormino</strong> &mdash; CGS-1000: Introduction to Computers &amp; Technology<br>
+    Hillsborough Community College &mdash; &copy; 2026
+  </footer>
+</section>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- PAGE 6: WORKS CITED                           -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="page" id="page-citations">
+  <div class="page-hero">
+    <h2>Works Cited</h2>
+    <div class="divider"></div>
+    <p>All sources consulted in the research and development of this academic portfolio, listed in APA format.</p>
+  </div>
+
+  <div class="container">
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h3>Academic &amp; Institutional Sources</h3>
+      <ul class="cite-list">
+        <li>
+          <span class="cite-num">[1]</span>
+          Hillsborough Community College. (2024). <em>Cybersecurity AA pathway.</em> HCC Academics.
+          <br><a href="https://www.hcfl.edu/academics/subjects/information-technology/cybersecurity-aa-pathway" target="_blank">https://www.hcfl.edu/academics/subjects/information-technology/cybersecurity-aa-pathway</a>
+        </li>
+        <li>
+          <span class="cite-num">[2]</span>
+          Hillsborough Community College. (2024). <em>Cybersecurity AS program.</em> HCC Academics.
+          <br><a href="https://www.hcfl.edu/academics/subjects/information-technology/cybersecurity" target="_blank">https://www.hcfl.edu/academics/subjects/information-technology/cybersecurity</a>
+        </li>
+        <li>
+          <span class="cite-num">[3]</span>
+          University of South Florida. (2025). <em>Bachelor of Science in Cybersecurity (BSCyS).</em> Bellini College of AI, Cybersecurity and Computing.
+          <br><a href="https://www.usf.edu/ai-cybersecurity-computing/academics/undergraduate/bscys.aspx" target="_blank">https://www.usf.edu/ai-cybersecurity-computing/academics/undergraduate/bscys.aspx</a>
+        </li>
+        <li>
+          <span class="cite-num">[4]</span>
+          University of South Florida. (2025). <em>Undergraduate degrees — Cybersecurity.</em> USF Cybersecurity.
+          <br><a href="https://www.usf.edu/cybersecurity/undergraduate_degrees.aspx" target="_blank">https://www.usf.edu/cybersecurity/undergraduate_degrees.aspx</a>
+        </li>
+        <li>
+          <span class="cite-num">[5]</span>
+          Western Governors University. (2025). <em>B.S. Cybersecurity and Information Assurance.</em> WGU Degrees.
+          <br><a href="https://www.wgu.edu/online-it-degrees/cybersecurity-information-assurance-bachelors-program.html" target="_blank">https://www.wgu.edu</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h3>Career &amp; Labor Market Sources</h3>
+      <ul class="cite-list">
+        <li>
+          <span class="cite-num">[6]</span>
+          U.S. Bureau of Labor Statistics. (2025). <em>Information security analysts: Occupational Outlook Handbook.</em> U.S. Department of Labor.
+          <br><a href="https://www.bls.gov/ooh/computer-and-information-technology/information-security-analysts.htm" target="_blank">https://www.bls.gov/ooh/computer-and-information-technology/information-security-analysts.htm</a>
+        </li>
+        <li>
+          <span class="cite-num">[7]</span>
+          Coursera Staff. (2025, December 4). <em>Penetration tester salary: Your 2026 guide.</em> Coursera.
+          <br><a href="https://www.coursera.org/articles/penetration-tester-salary" target="_blank">https://www.coursera.org/articles/penetration-tester-salary</a>
+        </li>
+        <li>
+          <span class="cite-num">[8]</span>
+          DestCert. (2026, April). <em>Top 10 highest-paid cybersecurity jobs in 2026.</em>
+          <br><a href="https://destcert.com/resources/highest-paid-cybersecurity-jobs/" target="_blank">https://destcert.com/resources/highest-paid-cybersecurity-jobs/</a>
+        </li>
+        <li>
+          <span class="cite-num">[9]</span>
+          Programs.com. (2026). <em>The latest cybersecurity career info.</em>
+          <br><a href="https://programs.com/careers/" target="_blank">https://programs.com/careers/</a>
+        </li>
+        <li>
+          <span class="cite-num">[10]</span>
+          CCI Training Center. (2025). <em>Highest paying cybersecurity jobs with state and city-wise salary.</em>
+          <br><a href="https://ccitraining.edu/blog/highest-paying-cybersecurity-jobs-with-state-and-city-wise-salary/" target="_blank">https://ccitraining.edu/blog/highest-paying-cybersecurity-jobs-with-state-and-city-wise-salary/</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Emerging Technology Sources</h3>
+      <ul class="cite-list">
+        <li>
+          <span class="cite-num">[11]</span>
+          Fortinet. (2025). <em>Artificial intelligence (AI) in cybersecurity: The future of threat defense.</em>
+          <br><a href="https://www.fortinet.com/resources/cyberglossary/artificial-intelligence-in-cybersecurity" target="_blank">https://www.fortinet.com/resources/cyberglossary/artificial-intelligence-in-cybersecurity</a>
+        </li>
+        <li>
+          <span class="cite-num">[12]</span>
+          Syracuse University iSchool. (2025, October 30). <em>AI in cybersecurity: How AI is changing threat defense.</em>
+          <br><a href="https://ischool.syracuse.edu/ai-in-cybersecurity/" target="_blank">https://ischool.syracuse.edu/ai-in-cybersecurity/</a>
+        </li>
+        <li>
+          <span class="cite-num">[13]</span>
+          BitLyft. (2025, December 23). <em>Future trends in AI and machine learning for cybersecurity.</em>
+          <br><a href="https://www.bitlyft.com/resources/future-trends-in-ai-and-machine-learning-for-cybersecurity" target="_blank">https://www.bitlyft.com/resources/future-trends-in-ai-and-machine-learning-for-cybersecurity</a>
+        </li>
+        <li>
+          <span class="cite-num">[14]</span>
+          Rapid7. (2025, June 23). <em>Emerging trends in AI-related cyberthreats in 2025: Impacts on organizational cybersecurity.</em>
+          <br><a href="https://www.rapid7.com/blog/post/emerging-trends-in-ai-related-cyberthreats-in-2025-impacts-on-organizational-cybersecurity/" target="_blank">https://www.rapid7.com/blog/post/emerging-trends-in-ai-related-cyberthreats-in-2025-impacts-on-organizational-cybersecurity/</a>
+        </li>
+        <li>
+          <span class="cite-num">[15]</span>
+          Cloud Security Alliance. (2025, March 14). <em>AI in cybersecurity: Revolutionizing threat detection and response.</em>
+          <br><a href="https://cloudsecurityalliance.org/blog/2025/03/14/a-i-in-cybersecurity-revolutionizing-threat-detection-and-response" target="_blank">https://cloudsecurityalliance.org/blog/2025/03/14/a-i-in-cybersecurity-revolutionizing-threat-detection-and-response</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <footer>
+    <strong>Nicholas Taormino</strong> &mdash; CGS-1000: Introduction to Computers &amp; Technology<br>
+    Hillsborough Community College &mdash; &copy; 2026
+  </footer>
+</section>
+
+<script>
+  function showPage(id, link) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('#desktopNav a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    link.classList.add('active');
+    // Sync mobile nav active state
+    document.querySelectorAll('#mobileNav a').forEach(a => a.classList.remove('active'));
+    const mobileMatch = document.querySelector('#mobileNav a[onclick*="' + id + '"]');
+    if (mobileMatch) mobileMatch.classList.add('active');
+    window.scrollTo(0, 0);
+    return false;
+  }
+
+  function mobileNav(id, link) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('#mobileNav a').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('#desktopNav a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    link.classList.add('active');
+    // Sync desktop nav
+    const desktopMatch = document.querySelector('#desktopNav a[onclick*="' + id + '"]');
+    if (desktopMatch) desktopMatch.classList.add('active');
+    // Close drawer
+    document.getElementById('mobileNav').classList.remove('open');
+    window.scrollTo(0, 0);
+    return false;
+  }
+
+  document.getElementById('navToggle').addEventListener('click', function() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  });
+
+  // Close mobile nav when clicking outside
+  document.addEventListener('click', function(e) {
+    const nav = document.getElementById('mobileNav');
+    const toggle = document.getElementById('navToggle');
+    if (nav.classList.contains('open') && !nav.contains(e.target) && !toggle.contains(e.target)) {
+      nav.classList.remove('open');
+    }
+  });
+</script>
+</body>
+</html>
